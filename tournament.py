@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-# 
 # tournament.py -- implementation of a Swiss-system tournament
-#
 
 import psycopg2
 
@@ -44,10 +42,9 @@ def countPlayers():
 
 def registerPlayer(name):
     """Adds a player to the tournament database.
-  
     The database assigns a unique serial id number for the player.  (This
     should be handled by your SQL database schema, not in your Python code.)
-  
+
     Args:
       name: the player's full name (need not be unique).
     """
@@ -62,7 +59,7 @@ def registerPlayer(name):
 def playerStandings():
     """Returns a list of the players and their win records, sorted by wins.
 
-    The first entry in the list should be the player in first place, or 
+    The first entry in the list should be the player in first place, or
     a player tied for first place if there is currently a tie.
 
     Returns:
@@ -94,16 +91,16 @@ def reportMatch(winner, loser):
     db_cursor.execute(query, (winner, loser))
     db.commit()
     db.close()
- 
+
 
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
-  
+
     Assuming that there are an even number of players registered, each player
     appears exactly once in the pairings.  Each player is paired with another
     player with an equal or nearly-equal win record, that is, a player adjacent
     to him or her in the standings. There won't be rematches between players.
-  
+
     Returns:
       A list of tuples, each of which contains (id1, name1, id2, name2)
         id1: the first player's unique id
@@ -132,15 +129,16 @@ def swissPairings():
 
 def rematched(id1, id2):
     """return TRUE if two players have already played with each other
-  
+
     Args:
       id1: the id number of one player
       id2: the id number of another player going to play with the player of id1
     """
     db = connect()
     db_cursor = db.cursor()
-    query = "SELECT * FROM matches WHERE (winner = %s AND loser = %s) OR (winner = %s AND loser = %s)"
-    db_cursor.execute(query, (id1, id2, id2, id1))
+    query1 = "SELECT * FROM matches WHERE (winner = %s AND loser = %s)"
+    query2 = "OR (winner = %s AND loser = %s)"
+    db_cursor.execute(query1 + query2, (id1, id2, id2, id1))
     matchesList = db_cursor.fetchall()
     db.close()
     return len(matchesList) != 0
