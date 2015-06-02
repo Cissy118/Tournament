@@ -13,3 +13,12 @@ tournament.py
 tournament_test.py
 ---- Unit tests for the functions in tournament.py
 
+Instruction
+-----------
+1. Run the Vagrant VM in the terminal.
+2. To create the database and connect to it, running psql and using the command:
+  \i tournament.sql
+3. To test the functions in tournament.py running unit tests file tournament_test.py:
+  python tournament_test.py
+
+
